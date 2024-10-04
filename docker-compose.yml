@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./laravel-10
+    # image: laravel-oracle_app
+    container_name: laravel-app
+    volumes:
+      - ./laravel-10:/var/www
+    networks:
+      - app-network
+
+  oracle:
+    image: oracle_19c
+    container_name: oracle
+    hostname: oracle
+    ports:
+      - 1524:1521
+      - 5502:5500
+    environment:
+      ORACLE_SID: ORCLCDB
+      ORACLE_PDB: ORCLPDB1
+      ORACLE_PWD: 123456
+      ORACLE_EDITION: standard
+      ORACLE_CHARACTERSET: AL32UTF8
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  mysql:
+    build:
+        context: ./mysql
+        args:
+          - MYSQL_VERSION=${MYSQL_VERSION}
+    image: mysql
+    hostname: mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}
+      - TZ=UTC
+      - ADMINER_DEFAULT_SERVER=mysql
+    command: mysqld --innodb-buffer-pool-size=10G
+    networks:
+      - app-network
+
+  adminer:
+    build:
+      context: ./adminer
+      args:
+        - INSTALL_MSSQL=false
+    volumes:
+      - ./adminer/conf.d/0-upload_large_dumps.ini:/usr/local/etc/php/conf.d/0-upload_large_dumps.ini
+    environment:
+      - ADMINER_DESIGN=hever
+    image: adminer
+    restart: always
+    container_name: adminer
+    ports:
+      - "8081:8080"
+    networks:
+      - app-network
+    environment:
+     - ADMINER_DESIGN=ng9
+
+networks:
+  app-network:
+    driver: bridge
+
