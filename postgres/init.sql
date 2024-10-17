@@ -1,0 +1,2 @@
+CREATE DATABASE fsl3pl_ci;
+GRANT ALL PRIVILEGES ON DATABASE fsl3pl_ci TO postgres;

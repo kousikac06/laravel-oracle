@@ -8,11 +8,13 @@ services:
     container_name: laravel-app
     volumes:
       - ./laravel-10:/var/www
+    depends_on:
+      - postgres
     networks:
       - app-network
 
   oracle:
-    image: oracle_19c
+    image: kousikac06/oracle
     container_name: oracle
     hostname: oracle
     ports:
@@ -67,6 +69,20 @@ services:
       - app-network
     environment:
      - ADMINER_DESIGN=ng9
+  
+  postgres:
+    build:
+      context: ./postgres
+    hostname: postgres
+    container_name: postgres
+    volumes:
+      - ./postgres/postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: fsl3pl_ci
+    networks:
+      - app-network
 
 networks:
   app-network:

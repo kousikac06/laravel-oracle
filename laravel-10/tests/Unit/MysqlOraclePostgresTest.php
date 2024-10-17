@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use App\Models\TokensTestMysql;
 use App\Models\TokensTestOracle;
+use App\Models\TokensTestPostgres;
 
-class MysqlOracleTest extends TestCase
+class MysqlOraclePostgresTest extends TestCase
 {
     use MultiDatabaseTransactions;
 
@@ -30,9 +31,14 @@ class MysqlOracleTest extends TestCase
             'token' => '111111'
         ]);
 
-        $token = TokensTestOracle::create([
+        $oracle = TokensTestOracle::create([
             'name' => 'oracle',
             'token' => '222222'
+        ]);
+
+        $postgres = TokensTestPostgres::create([
+            'name' => 'postgres',
+            'token' => '333333'
         ]);
 
         $this->assertSame([
@@ -41,8 +47,12 @@ class MysqlOracleTest extends TestCase
                 'token' => $mysql->token,
             ], 
             [
-                'name' => $token->name,
-                'token' => $token->token,
+                'name' => $oracle->name,
+                'token' => $oracle->token,
+            ],
+            [
+                'name' => $postgres->name,
+                'token' => $postgres->token,
             ]
         ], [
             [
@@ -52,13 +62,18 @@ class MysqlOracleTest extends TestCase
             [
                 'name' => 'oracle',
                 'token' => '222222',
+            ],
+            [
+                'name' => 'postgres',
+            'token' => '333333'
             ]
         ]);
 
-        $this->assertSame([
+        $this->assertSame([1,1,1], [
             TokensTestMysql::get()->count(),
             TokensTestOracle::get()->count(),
-        ], [1,1]);
+            TokensTestPostgres::get()->count(),
+        ]);
     }
 
     public function tearDown(): void

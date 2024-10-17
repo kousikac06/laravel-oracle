@@ -34,6 +34,6 @@ trait MultiDatabaseTransactions
     protected function connectionsToTrans()
     {
         // 返回需要進行交易的所有連接名稱，例如 MySQL 和 Oracle
-        return ['mysql', 'oracle'];
+        return ['mysql', 'oracle', 'pgsql'];
     }
 }

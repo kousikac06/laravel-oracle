@@ -42,7 +42,7 @@ class Test extends Command
      */
     public function handle()
     {
-        dd(SS1DC::get()->toArray());
+        // dd(SS1DC::get()->toArray());
 
 
         // $mysql = TokensTestMysql::create([
@@ -57,7 +57,7 @@ class Test extends Command
 // 
         // dd($mysql->toArray(), $token->toArray());
 
-        // TokensTestMysql::getQuery()->delete();
-        // TokensTestOracle::getQuery()->delete();
+        TokensTestMysql::getQuery()->delete();
+        TokensTestOracle::getQuery()->delete();
     }
 }

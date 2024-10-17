@@ -13,6 +13,15 @@ RUN apt-get update && apt-get install -y \
 # 為了測試 mysql 裝的
 RUN docker-php-ext-install pdo_mysql
 
+# 安装系统依赖和 PostgreSQL 扩展
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    && docker-php-ext-install pdo \
+    && docker-php-ext-install pgsql \
+    && docker-php-ext-install pdo_pgsql \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # 創見 Oracle Instant Client 安裝目錄
 RUN mkdir -p /opt/oracle
 
