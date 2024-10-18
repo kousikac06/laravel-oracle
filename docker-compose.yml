@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: ./laravel-10
-    # image: laravel-oracle_app
+    # build:
+    #   context: ./laravel-10
+    image: kousikac06/laravel-oracle_app
     container_name: laravel-app
     volumes:
       - ./laravel-10:/var/www
@@ -32,11 +32,11 @@ services:
       - app-network
 
   mysql:
-    build:
-        context: ./mysql
-        args:
-          - MYSQL_VERSION=${MYSQL_VERSION}
-    image: mysql
+    # build:
+    #     context: ./mysql
+    #     args:
+    #       - MYSQL_VERSION=${MYSQL_VERSION}
+    image: kousikac06/mysql
     hostname: mysql
     restart: always
     environment:
@@ -52,10 +52,11 @@ services:
       - app-network
 
   adminer:
-    build:
-      context: ./adminer
-      args:
-        - INSTALL_MSSQL=false
+    # build:
+    #   context: ./adminer
+    #   args:
+    #     - INSTALL_MSSQL=false
+    image: kousikac06/adminer
     volumes:
       - ./adminer/conf.d/0-upload_large_dumps.ini:/usr/local/etc/php/conf.d/0-upload_large_dumps.ini
     environment:
@@ -71,8 +72,9 @@ services:
      - ADMINER_DESIGN=ng9
   
   postgres:
-    build:
-      context: ./postgres
+    # build:
+    #   context: ./postgres
+    image: kousikac06/postgres
     hostname: postgres
     container_name: postgres
     volumes:
