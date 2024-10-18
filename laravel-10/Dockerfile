@@ -106,12 +106,14 @@ ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_19_24
 
 # 安裝 PHP OCI8 extension
 RUN echo "instantclient,/opt/oracle/instantclient_19_24" | pecl install oci8 && \
-    sh -c 'echo "extension = oci8.so" >> /usr/local/etc/php/php.ini' \
-    sh -c 'echo "memory_limit = -1" >> /usr/local/etc/php/php.ini' \
-    sh -c 'echo "zend_extension = opcache.so" >> /usr/local/etc/php/php.ini' \
-    sh -c 'echo "opcache.enable = 1" >> /usr/local/etc/php/php.ini' \
-    sh -c 'echo "opcache.jit_buffer_size = 100M" >> /usr/local/etc/php/php.ini' \
-    sh -c 'echo "opcache.jit = 1255" >> /usr/local/etc/php/php.ini'
+    cat >> /usr/local/etc/php/php.ini <<EOF
+extension = oci8.so
+memory_limit = -1
+zend_extension = opcache.so
+opcache.enable = 1
+opcache.jit_buffer_size = 100M
+opcache.jit = 1255
+EOF
 
 # 安裝 Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
